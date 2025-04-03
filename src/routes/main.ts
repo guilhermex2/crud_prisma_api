@@ -1,14 +1,11 @@
-import e, { Router } from "express";
-import { createUser } from "../services/user";
-import { readUser } from "../services/user";
-import { updateUser } from "../services/user";
-import { deleteUser } from "../services/user";
+import{ Router } from "express";
+import { createUser, createUsers, readUser, readUsers, updateUsers, deleteUser} from "../services/user";
 
 const mainRouter = Router();
 
 //Try catch para tratar erros na criação do usuário
 /*Os dados podem ser recebidos pelo body, query, params, etc.*/
-mainRouter.post('/user', async(req, res) => {
+mainRouter.post('/createUser', async(req, res) => {
     try{
         const result = await createUser({
             name: req.body.name,
@@ -20,17 +17,35 @@ mainRouter.post('/user', async(req, res) => {
     }
 })
 
+mainRouter.post('/createUsers', async(req, res) => {
+    try{
+        const result = await createUsers(req.body);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({error: "Erro ao criar usuários"});
+    }
+})
+
 mainRouter.get('/users', async(req, res) => {
     const result = await readUser();
     res.json(result);
 })
 
-mainRouter.put('/users', async(req, res) => {
-    const result = await updateUser();
-    res.json(result);
+mainRouter.get('/readUsers', async(req, res) => {
+    try{
+        const result = await readUsers();
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({error: "Erro ao bucar usuários"});
+    }
 })
 
-mainRouter.delete('/users', async(req, res) => {
+mainRouter.put('/updateUsers', async(req, res) => {
+    const result = await updateUsers();
+    res.json(result);
+})
+ 
+mainRouter.delete('/deleteUser', async(req, res) => {
     const result = await deleteUser();
     res.json(result);
 })
